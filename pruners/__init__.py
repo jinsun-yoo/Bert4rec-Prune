@@ -1,4 +1,4 @@
-from .prune import SmallWeightPruner
+from .smallweightprune import SmallWeightPruner
 
 
 PRUNERS = {
