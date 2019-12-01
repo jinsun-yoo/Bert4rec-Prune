@@ -1,6 +1,7 @@
 from loggers import *
 from config import STATE_DICT_KEY, OPTIMIZER_STATE_DICT_KEY
 from utils import AverageMeterSet
+from pruners import smallweightprune
 
 import torch
 import torch.nn as nn
@@ -8,12 +9,13 @@ import torch.optim as optim
 from tensorboardX import SummaryWriter
 from tqdm import tqdm
 
+
 from abc import *
 from pathlib import Path
 
 
 class AbstractTrainer(metaclass=ABCMeta):
-    def __init__(self, args, model, train_loader, val_loader, test_loader, export_root):
+    def __init__(self, args, model, train_loader, val_loader, test_loader, export_root, pruner):
         self.args = args
         self.device = args.device
         self.model = model.to(self.device)
@@ -36,6 +38,11 @@ class AbstractTrainer(metaclass=ABCMeta):
         self.add_extra_loggers()
         self.logger_service = LoggerService(self.train_loggers, self.val_loggers)
         self.log_period_as_iter = args.log_period_as_iter
+
+        self.pruner = pruner
+        self.pruning_perc = args.pruning_perc
+        self.num_prune_epochs = args.num_prune_epochs
+
 
     @abstractmethod
     def add_extra_loggers(self):
@@ -69,9 +76,20 @@ class AbstractTrainer(metaclass=ABCMeta):
         })
         self.writer.close()
     
+    def prune(self):
+        accum_iter = 0
+        self.validate(0, accum_iter)
+        for epoch in range(self.num_prune_epochs):
+            accum_iter = self.train_one_epoch(epoch, accum_iter, True)
+            self.validate(epoch, accum_iter)
+        self.logger_service.complete({
+            'state_dict': (self._create_state_dict()),
+        })
+        self.writer.close()
+
         
 
-    def train_one_epoch(self, epoch, accum_iter):
+    def train_one_epoch(self, epoch, accum_iter, do_prune=False):
         self.model.train()
         self.lr_scheduler.step()
 
@@ -83,6 +101,11 @@ class AbstractTrainer(metaclass=ABCMeta):
             batch = [x.to(self.device) for x in batch]
 
             self.optimizer.zero_grad()
+
+            if do_prune:
+                masks = self.pruner.weight_prune(self.model, self.pruning_perc)
+                self.model.set_masks(masks)
+
             loss = self.calculate_loss(batch)
             loss.backward()
 
@@ -156,8 +179,6 @@ class AbstractTrainer(metaclass=ABCMeta):
                 description = description.replace('NDCG', 'N').replace('Recall', 'R')
                 description = description.format(*(average_meter_set[k].avg for k in description_metrics))
                 tqdm_dataloader.set_description(description)
-
-            
 
 
     def _create_optimizer(self):

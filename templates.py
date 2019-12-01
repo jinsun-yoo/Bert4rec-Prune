@@ -48,6 +48,8 @@ def set_template(args):
         args.bert_num_heads = 4
         args.bert_num_items = num_items
 
+        args.prune_code = 'smallweight'
+
 
 def get_user_item_nums(args):
     if args.dataset_code == 'ml-1m':
