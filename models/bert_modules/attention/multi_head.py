@@ -1,7 +1,7 @@
 import torch.nn as nn
 from .single import Attention
 
-from custom_layers import MaskedLinear
+from .custom_layers import MaskedLinear
 
 
 class MultiHeadedAttention(nn.Module):
