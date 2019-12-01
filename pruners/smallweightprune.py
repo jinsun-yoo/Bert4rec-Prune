@@ -25,6 +25,7 @@ class SmallWeightPruner(AbstractPruner):
 
         # generate mask
         masks = []
+        print(len(model.parameters()))
         for p in model.parameters():
             if len(p.data.size()) != 1:
                 pruned_inds = p.data.abs() > threshold
