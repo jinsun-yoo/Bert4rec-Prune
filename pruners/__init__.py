@@ -7,5 +7,5 @@ PRUNERS = {
 
 
 def pruner_factory(args, model):
-    pruner = PRUNERS[args.pruner_code]
+    pruner = PRUNERS[args.prune_code]
     return pruner(args, model)
