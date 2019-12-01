@@ -6,7 +6,7 @@ import numpy as np
 
 class SmallWeightPruner(AbstractPruner):
     def __init__(self, args, model):
-        super().__init__(self, args, model)
+        super().__init__(args, model)
 
     @classmethod
     def code(cls):
