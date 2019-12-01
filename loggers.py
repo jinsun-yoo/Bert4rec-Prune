@@ -9,9 +9,10 @@ def save_state_dict(state_dict, path, filename):
 
 
 class LoggerService(object):
-    def __init__(self, train_loggers=None, val_loggers=None):
+    def __init__(self, train_loggers=None, val_loggers=None, test_loggers=None):
         self.train_loggers = train_loggers if train_loggers else []
         self.val_loggers = val_loggers if val_loggers else []
+        #self.test_loggers = test_loggers if test_loggers else []
 
     def complete(self, log_data):
         for logger in self.train_loggers:
@@ -25,6 +26,10 @@ class LoggerService(object):
 
     def log_val(self, log_data):
         for logger in self.val_loggers:
+            logger.log(**log_data)
+
+    def log_test(self, log_data):
+        for logger in self.test_loggers:
             logger.log(**log_data)
 
 
