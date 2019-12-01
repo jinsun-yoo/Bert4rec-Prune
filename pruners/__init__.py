@@ -6,6 +6,6 @@ PRUNERS = {
 }
 
 
-def pruner_factory(args, model, trainer):
+def pruner_factory(args, model):
     pruner = PRUNERS[args.pruner_code]
-    return pruner(args, model, trainer)
+    return pruner(args, model)

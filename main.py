@@ -8,10 +8,15 @@ from utils import *
 
 def train():
     export_root = setup_train(args)
+    print('model')
     model = model_factory(args)
+    print('loader')
     train_loader, val_loader, test_loader = dataloader_factory(args)
+    print('pruner')
     pruner = pruner_factory(args, model)
+    print('trainer')
     trainer = trainer_factory(args, model, train_loader, val_loader, test_loader, export_root, pruner)
+    print('train')
     trainer.train()
     trainer.prune()
     #test_result = test_with(trainer.best_model, test_loader)

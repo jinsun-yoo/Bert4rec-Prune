@@ -13,7 +13,7 @@ from pathlib import Path
 
 
 class AbstractPruner():
-    def __init__(self, args, model, trainer):
+    def __init__(self, args, model):
         self.args = args
         self.device = args.device
         self.model = model.to(self.device)
