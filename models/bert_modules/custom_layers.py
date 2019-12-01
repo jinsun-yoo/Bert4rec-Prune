@@ -31,12 +31,12 @@ class MaskedLinear(nn.Linear):
         super(MaskedLinear, self).__init__(in_features, out_features, bias)
         self.mask_flag = False
     
-    def set_mask(self, mask):
+    def set_masks(self, mask):
         self.mask = to_var(mask, requires_grad=False)
         self.weight.data = self.weight.data*self.mask.data
         self.mask_flag = True
     
-    def get_mask(self):
+    def get_masks(self):
         #print(self.mask_flag)
         return self.mask
     
