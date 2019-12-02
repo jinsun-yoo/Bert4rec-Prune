@@ -21,6 +21,15 @@ def train():
     #trainer.train()
     trainer.test()
     trainer.prune()
+
+
+    for name, p in model.bert.named_parameters():
+        print(f'[{i}]')
+        i += 1
+        print(name)
+        print(p.requires_grad)
+        print(p.size())
+        print(len(p.data.size()))
     #test_result = test_with(trainer.best_model, test_loader)
     #save_test_result(export_root, test_result)
 
