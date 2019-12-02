@@ -19,6 +19,9 @@ class BERTModel(BaseModel):
         return self.out(x)
     
     def set_masks(self, masks):
+        for mask in masks:
+            print(mask)
+            print(mask.data.size())
         self.bert.transformer_blocks[0].attention.linear_layers[0].set_masks((masks[2]))
         self.bert.transformer_blocks[0].attention.linear_layers[1].set_masks((masks[3]))
         self.bert.transformer_blocks[0].attention.linear_layers[2].set_masks((masks[4]))
