@@ -11,6 +11,7 @@ from tqdm import tqdm
 from abc import *
 from pathlib import Path
 
+from models.bert_modules.custom_layers import MaskedLinear
 
 class AbstractPruner():
     def __init__(self, args, model):
@@ -37,4 +38,4 @@ class AbstractPruner():
             if type(modules) in [MaskedLinear]:
                 print(f'[{i}]')
                 print(modules)
-                print(100*(1-modules.get_mask().view(-1,1).sum().item()/modules.get_mask().view(-1,1).size(0)))
+                print(100*(1-modules.get_masks().view(-1,1).sum().item()/modules.get_masks().view(-1,1).size(0)))
