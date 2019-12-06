@@ -1,3 +1,4 @@
+%%writefile templates.py
 def set_template(args):
     if args.template is None:
         return
@@ -148,7 +149,7 @@ def set_template(args):
         args.bert_num_items = num_items
 
         args.prune_code = 'smallweight'
-        args.pruning_perc = 95
+        args.pruning_perc = 10
         args.num_prune_epochs = 40
         args.prune = True
 
