@@ -32,7 +32,7 @@ class MaskedLinear(nn.Linear):
         self.mask_flag = False
     
     def set_masks(self, mask):
-        print(f'setting mask for {self.name}')
+        #print(f'setting mask for {self.name}')
         print(f'weight data')
         print(self.weight.data)
         print('mask data')
