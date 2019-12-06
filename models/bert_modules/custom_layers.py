@@ -33,15 +33,15 @@ class MaskedLinear(nn.Linear):
     
     def set_masks(self, mask):
         #print(f'setting mask for {self.name}')
-        print(f'weight data')
-        print(self.weight.data)
-        print('mask data')
-        print(mask)
+        #print(f'weight data')
+        #print(self.weight.data)
+        #print('mask data')
+        #print(mask)
         
         self.mask = to_var(mask, requires_grad=False)
         self.weight.data = self.weight.data*self.mask.data
-        print(f'weight data after')
-        print(self.weight.data)
+        #print(f'weight data after')
+        #print(self.weight.data)
         self.mask_flag = True
     
     def get_masks(self):
