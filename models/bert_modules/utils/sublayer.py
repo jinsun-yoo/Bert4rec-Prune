@@ -1,5 +1,5 @@
 import torch.nn as nn
-from .custom_layers import LayerNorm
+from models.bert_modules.attention.custom_layers import LayerNorm
 
 
 class SublayerConnection(nn.Module):
