@@ -26,17 +26,26 @@ class AbstractPruner():
         """Print only for linear layers for now"""
         i = 0
         for modules in model.bert.modules():
+            print(modules)
             if type(modules) in [MaskedLinear]:
-                print(f'[{i}]')
-                print(modules)
-                print(modules.get_masks())
+                if type(modules.get_masks()) is str:
+                    print('no mask')
+                else:
+                    print(f'[{i}]')
+                    print(modules.get_masks())
+            else:
+                print('no mask')
 
     def print_percentage(self, model):
         """Print only for linear layers for now"""
         i = 0
         for modules in model.bert.modules():
+            print(modules)
             if type(modules) in [MaskedLinear]:
-                if type(modules.get_masks()) is not str:
+                if type(modules.get_masks()) is str:
+                    print('no mask')
+                else:
                     print(f'[{i}]')
-                    print(modules)
                     print(100*(1-modules.get_masks().view(-1,1).sum().item()/modules.get_masks().view(-1,1).size(0)))
+            else:
+                print('no mask')

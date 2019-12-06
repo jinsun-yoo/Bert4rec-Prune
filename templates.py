@@ -97,8 +97,8 @@ def set_template(args):
         args.bert_num_items = num_items
 
         args.prune_code = 'smallweight'
-        args.pruning_perc = 50
-        args.num_prune_epochs = 2
+        args.pruning_perc = 95
+        args.num_prune_epochs = 40
         args.prune = True
 
     elif args.template.startswith('prune'):
@@ -148,7 +148,7 @@ def set_template(args):
         args.bert_num_items = num_items
 
         args.prune_code = 'smallweight'
-        args.pruning_perc = 50
+        args.pruning_perc = 95
         args.num_prune_epochs = 40
         args.prune = True
 
