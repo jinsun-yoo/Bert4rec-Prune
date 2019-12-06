@@ -7,6 +7,7 @@ import random
 from datetime import date
 from pathlib import Path
 
+import matplotlib as plt
 import numpy as np
 import torch
 import torch.backends.cudnn as cudnn
@@ -94,6 +95,11 @@ def create_optimizer(model, args):
 
     return optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weight_decay, momentum=args.momentum)
 
+def scatterplot(layer, width = 256, height = 256):
+    y = torch.ones(width, height)
+    x = layer.cpu().detach().numpy()
+    plt.scatter(x,y)
+    plt.show()
 
 class AverageMeterSet(object):
     def __init__(self, meters=None):

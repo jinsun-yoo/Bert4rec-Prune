@@ -13,7 +13,7 @@ parser = argparse.ArgumentParser(description='RecPlay')
 # Top Level
 ################
 parser.add_argument('--mode', type=str, default='train', choices=['train'])
-parser.add_argument('--template', type=str, default=None)
+parser.add_argument('--template', type=str, default='proofofconcept_prune')
 
 ################
 # Test
