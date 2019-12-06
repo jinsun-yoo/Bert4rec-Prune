@@ -20,7 +20,7 @@ def train():
     load_pretrained_weights(model, './experiments/test_2019-12-02_0/models/best_acc_model.pth')
     #trainer.train()
     trainer.test()
-    #trainer.prune()
+    trainer.prune()
 
     i = 0
     for name, p in model.bert.named_parameters():

@@ -97,8 +97,8 @@ def set_template(args):
         args.bert_num_items = num_items
 
         args.prune_code = 'smallweight'
-        args.pruning_perc = '50'
-        args.num_prune_epochs = '3'
+        args.pruning_perc = 50
+        args.num_prune_epochs = 3
         args.prune = True
 
 
