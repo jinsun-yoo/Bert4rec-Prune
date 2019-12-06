@@ -20,3 +20,21 @@ class AbstractPruner():
         self.is_parallel = args.num_gpu > 1
         if self.is_parallel:
             self.model = nn.DataParallel(self.model)
+
+    def print_mask(self, model):
+        """Print only for linear layers for now"""
+        i = 0
+        for modules in model.bert.modules():
+            if type(modules) in [MaskedLinear]:
+                print(f'[{i}]')
+                print(modules)
+                print(modules.get_masks())
+
+    def print_percentage(self, model):
+        """Print only for linear layers for now"""
+        i = 0
+        for modules in model.bert.modules():
+            if type(modules) in [MaskedLinear]:
+                print(f'[{i}]')
+                print(modules)
+                print(100*(1-modules.get_mask().view(-1,1).sum().item()/modules.get_mask().view(-1,1).size(0)))

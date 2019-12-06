@@ -20,8 +20,10 @@ def train():
     load_pretrained_weights(model, './experiments/test_2019-12-02_0/models/best_acc_model.pth')
     #trainer.train()
     #trainer.test()
-    trainer.prune()
-
+    if args.prune:
+        trainer.prune()
+    pruner.print_mask(model)
+    pruner.print_percentage(model)
     i = 0
     for name, p in model.bert.named_parameters():
         print(f'[{i}]')

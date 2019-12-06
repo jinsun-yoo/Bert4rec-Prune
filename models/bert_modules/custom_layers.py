@@ -30,6 +30,7 @@ class MaskedLinear(nn.Linear):
     def __init__(self, in_features, out_features, bias=True):
         super(MaskedLinear, self).__init__(in_features, out_features, bias)
         self.mask_flag = False
+        self.mask = ''
     
     def set_masks(self, mask):
         #print(f'setting mask for {self.name}')
