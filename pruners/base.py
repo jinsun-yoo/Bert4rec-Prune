@@ -36,6 +36,7 @@ class AbstractPruner():
         i = 0
         for modules in model.bert.modules():
             if type(modules) in [MaskedLinear]:
-                print(f'[{i}]')
-                print(modules)
-                print(100*(1-modules.get_masks().view(-1,1).sum().item()/modules.get_masks().view(-1,1).size(0)))
+                if type(modules.get_masks()) is not str:
+                    print(f'[{i}]')
+                    print(modules)
+                    print(100*(1-modules.get_masks().view(-1,1).sum().item()/modules.get_masks().view(-1,1).size(0)))

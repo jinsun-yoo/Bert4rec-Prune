@@ -32,8 +32,8 @@ class MaskedLinear(nn.Linear):
         self.mask_flag = False
         self.mask = ''
     
-    def set_masks(self, mask):
-        print(f'setting mask for {self}')
+    def set_masks(self, mask, layername=''):
+        print(f'setting mask for {self}+{layername}')
         #print(f'weight data')
         #print(self.weight.data)
         #print('mask data')
