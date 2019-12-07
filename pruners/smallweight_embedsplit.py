@@ -1,4 +1,4 @@
-%%writefile pruners/smallweight_embedsplit.py
+#%%writefile pruners/smallweight_embedsplit.py
 from .base import AbstractPruner
 from models.bert_modules.custom_layers import *
 import torch.nn as nn
@@ -27,7 +27,7 @@ class SmallWeightSplitEmbeddedPruner(AbstractPruner):
                 elif 'token' in name:
                     all_embed += list(p.cpu().data.abs().numpy().flatten())
         threshold = np.percentile(np.array(all_weights), pruning_perc) # For example, median = np.percnetile(some_vector, 50.)
-        threshold_embedded = np.percentile(np.array(all_weights), pruning_perc_embed) # For example, median = np.percnetile(some_vector, 50.)
+        threshold_embedded = np.percentile(np.array(all_embed), pruning_perc_embed) # For example, median = np.percnetile(some_vector, 50.)
         """
                 #print(f'adding weigths of {name}')
                 #print(f'original data is {p.data}')
