@@ -12,7 +12,7 @@ class SmallWeightPruner(AbstractPruner):
     def code(cls):
         return 'smallweight'
 
-    def weight_prune(self, model, pruning_perc):
+    def weight_prune(self, model, pruning_perc, pruning_perc_embed):
         '''
         Prune pruning_perc% weights globally (not layer-wise)
         arXiv: 1606.09274
@@ -30,12 +30,6 @@ class SmallWeightPruner(AbstractPruner):
         masks = []
         for name, p in model.named_parameters():
             if len(p.data.size()) != 1:
-                print(f'make mask for {name}')
                 pruned_inds = p.data.abs() > threshold
                 masks.append(pruned_inds.float())
-        print('print mask output')
-        i = 0
-        for mask in masks
-            print(f'[{i}]')
-            print(mask)
         return masks

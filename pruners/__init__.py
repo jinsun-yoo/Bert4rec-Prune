@@ -1,8 +1,9 @@
-from .smallweightprune import SmallWeightPruner
+from .smallweightprune import SmallWeightPruner, SmallWeightEmbeddedPruner
 
 
 PRUNERS = {
     SmallWeightPruner.code(): SmallWeightPruner,
+    SmallWeightSplitEmbeddedPruner.code(): SmallWeightSplitEmbeddedPruner
 }
 
 

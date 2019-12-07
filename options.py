@@ -13,7 +13,7 @@ parser = argparse.ArgumentParser(description='RecPlay')
 # Top Level
 ################
 parser.add_argument('--mode', type=str, default='train', choices=['train'])
-parser.add_argument('--template', type=str, default='proofofconcept_prune')
+parser.add_argument('--template', type=str, default='embedsplit_smallweight_poc')
 
 ################
 # Test
@@ -97,6 +97,7 @@ parser.add_argument('--experiment_description', type=str, default='test')
 parser.add_argument('--prune_code', type=str, default='smallweight')
 parser.add_argument('--prune', type=bool, default=False)
 parser.add_argument('--pruning_perc', type=int, default=0)
+parser.add_argument('--pruning_perc_embed', type=int, default=0)
 parser.add_argument('--num_prune_epochs', type=int, default=40)
 
 ################
