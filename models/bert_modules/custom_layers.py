@@ -57,5 +57,38 @@ class MaskedLinear(nn.Linear):
         else:
             return F.linear(x, self.weight, self.bias)
 
+class MaskedEmbedded(nn.Embedding):
+    "Construct a layernorm module (See citation for details)."
 
+    def __init__(self, len, model):
+        super(MaskedEmbedded, self).__init__(len, model)
+
+    def set_masks(self, mask, layername=''):
+        #print(f'setting mask for {self}+{layername}')
+        #print(f'weight data')
+        #print(self.weight.data)
+        #print('mask data')
+        #print(mask)
+        
+        self.mask = to_var(mask, requires_grad=False)
+        self.weight.data = self.weight.data*self.mask.data
+        #print(f'weight data after')
+        #print(self.weight.data)
+        self.mask_flag = True
+    
+    def get_masks(self):
+        #print(self.mask_flag)
+        return self.mask
+    
+    def forward(self, x):
+        if self.mask_flag == True:
+            # applying pruning mask
+            weight = self.weight*self.mask
+            return F.embedding(
+                x, self.weight, self.padding_idx, self.max_norm,
+                self.norm_type, self.scale_grad_by_freq, self.sparse)
+        else:
+            return F.embedding(
+                x, self.weight, self.padding_idx, self.max_norm,
+                self.norm_type, self.scale_grad_by_freq, self.sparse)
 #class MaskedEmbedding(nn.Embedding):

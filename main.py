@@ -4,7 +4,7 @@ from dataloaders import dataloader_factory
 from trainers import trainer_factory
 from pruners import pruner_factory
 from utils import *
-
+from utils import scatterplot
 
 def train():
     export_root = setup_train(args)
@@ -19,13 +19,17 @@ def train():
     print('train')
     load_pretrained_weights(model, './experiments/test_2019-12-02_0/models/best_acc_model.pth')
     #trainer.train()
-    #trainer.test()
+    trainer.test()
     print(model.bert.transformer_blocks[0].attention.linear_layers[0].weight)
+    scatterplot(model.bert.transformer_blocks[0].attention.linear_layers[0].weight, 256, 256)
+    scatterplot(model.bert.embedding.token.weight, 3708, 256)
     if args.prune:
         trainer.prune()
     pruner.print_mask(model)
     pruner.print_percentage(model)
     print(model.bert.transformer_blocks[0].attention.linear_layers[0].weight)
+    scatterplot(model.bert.transformer_blocks[0].attention.linear_layers[0].weight, 256, 256)
+    scatterplot(model.bert.embedding.token.weight, 3708, 256)
     i = 0
     """
     for name, p in model.bert.named_parameters():
@@ -39,6 +43,8 @@ def train():
     #test_result = test_with(trainer.best_model, test_loader)
     #save_test_result(export_root, test_result)
 
+    #torch.histc(model.bert.transformer_blocks[0].attention.linear_layers[0].weight)
+    #print(torch.histc(model.bert.transformer_blocks[0].attention.linear_layers[0].weight))
 
 if __name__ == '__main__':
     if args.mode == 'train':
