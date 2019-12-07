@@ -1,4 +1,5 @@
-from .smallweightprune import SmallWeightPruner, SmallWeightEmbeddedPruner
+from .smallweightprune import SmallWeightPruner
+from .smallweight_embedsplit import SmallWeightSplitEmbeddedPruner
 
 
 PRUNERS = {

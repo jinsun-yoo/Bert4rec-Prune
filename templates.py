@@ -198,7 +198,7 @@ def set_template(args):
         args.bert_num_heads = 4
         args.bert_num_items = num_items
 
-        args.prune_code = 'smallweight'
+        args.prune_code = 'smallweightsplitembeddedpruner'
         args.pruning_perc = 75
         args.pruning_perc_embed = 75
         args.num_prune_epochs = 3
@@ -250,7 +250,7 @@ def set_template(args):
         args.bert_num_heads = 4
         args.bert_num_items = num_items
 
-        args.prune_code = 'smallweight'
+        args.prune_code = 'smallweightsplitembeddedpruner'
         args.pruning_perc = 10
         args.pruning_perc_embed = 10
         args.num_prune_epochs = 40

@@ -41,6 +41,7 @@ class AbstractTrainer(metaclass=ABCMeta):
 
         self.pruner = pruner
         self.pruning_perc = args.pruning_perc
+        self.pruning_perc_embed = args.pruning_perc_embed
         self.num_prune_epochs = args.num_prune_epochs
 
 
@@ -121,7 +122,7 @@ class AbstractTrainer(metaclass=ABCMeta):
             self.optimizer.zero_grad()
 
             if do_prune:
-                masks = self.pruner.weight_prune(self.model, self.pruning_perc)
+                masks = self.pruner.weight_prune(self.model, self.pruning_perc, self.pruning_perc_embed)
                 self.model.set_masks(masks)
 
             loss = self.calculate_loss(batch)

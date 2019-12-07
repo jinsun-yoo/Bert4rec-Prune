@@ -11,7 +11,7 @@ from tqdm import tqdm
 from abc import *
 from pathlib import Path
 
-from models.bert_modules.custom_layers import MaskedLinear
+from models.bert_modules.custom_layers import MaskedLinear, MaskedEmbedding
 
 class AbstractPruner():
     def __init__(self, args, model):
@@ -26,7 +26,7 @@ class AbstractPruner():
         """Print only for linear layers for now"""
         i = 0
         for modules in model.bert.modules():
-            if type(modules) in [MaskedLinear]:
+            if type(modules) in [MaskedLinear, MaskedEmbedding]:
                 if type(modules.get_masks()) is str:
                     print('no mask')
                 else:
@@ -40,7 +40,7 @@ class AbstractPruner():
         """Print only for linear layers for now"""
         i = 0
         for modules in model.bert.modules():
-            if type(modules) in [MaskedLinear]:
+            if type(modules) in [MaskedLinear, MaskedEmbedding]:
                 if type(modules.get_masks()) is str:
                     print('no mask')
                 else:

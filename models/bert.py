@@ -25,6 +25,17 @@ class BERTModel(BaseModel):
             print(mask.data.size())
         """
         self.bert.embedding.token.set_masks((masks[0]), 'embedding_token')
+        self.bert.transformer_blocks[0].attention.linear_layers[0].set_masks((masks[1]), 'tr0_lin0')
+        self.bert.transformer_blocks[0].attention.linear_layers[1].set_masks((masks[2]), 'tr0_lin1')
+        self.bert.transformer_blocks[0].attention.linear_layers[2].set_masks((masks[3]), 'tr0_lin2')
+        self.bert.transformer_blocks[0].attention.output_linear.set_masks((masks[4]), 'tr0_lin3')
+        self.bert.transformer_blocks[1].attention.linear_layers[0].set_masks((masks[5]), 'tr1_lin0')
+        self.bert.transformer_blocks[1].attention.linear_layers[1].set_masks((masks[6]), 'tr1_lin1')
+        self.bert.transformer_blocks[1].attention.linear_layers[2].set_masks((masks[7]), 'tr1_lin2')
+        self.bert.transformer_blocks[1].attention.output_linear.set_masks((masks[8]), 'tr1_lin3')
+
+        """
+        self.bert.embedding.token.set_masks((masks[0]), 'embedding_token')
         #print('[1]')
         self.bert.transformer_blocks[0].attention.linear_layers[0].set_masks((masks[2]), 'tr0_lin0')
         #print('[2]')
@@ -49,3 +60,4 @@ class BERTModel(BaseModel):
         #self.bert.transformer_blocks[0].feed_forward.w_2.set_masks((masks[15]))
         #self.bert.transformer_blocks[0].input_sublayer.norm.set_masks((masks[16]))
         #self.bert.transformer_blocks[0].input_sublayer.norm.set_masks((masks[17]))
+        """

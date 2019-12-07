@@ -1,3 +1,4 @@
+%%writefile pruners/smallweight_embedsplit.py
 from .base import AbstractPruner
 from models.bert_modules.custom_layers import *
 import torch.nn as nn
@@ -18,8 +19,16 @@ class SmallWeightSplitEmbeddedPruner(AbstractPruner):
         arXiv: 1606.09274
         '''    
         all_weights = []
+        all_embed = []
         for name, p in model.named_parameters():
-            if len(p.data.size()) != 1 and type(p) is MaskedLinear:
+            if len(p.data.size()) != 1:
+                if 'linear' in name:
+                    all_weights += list(p.cpu().data.abs().numpy().flatten())
+                elif 'token' in name:
+                    all_embed += list(p.cpu().data.abs().numpy().flatten())
+        threshold = np.percentile(np.array(all_weights), pruning_perc) # For example, median = np.percnetile(some_vector, 50.)
+        threshold_embedded = np.percentile(np.array(all_weights), pruning_perc_embed) # For example, median = np.percnetile(some_vector, 50.)
+        """
                 #print(f'adding weigths of {name}')
                 #print(f'original data is {p.data}')
                 #print(f'list is {(p.cpu().data.abs().numpy().flatten)}')
@@ -29,24 +38,22 @@ class SmallWeightSplitEmbeddedPruner(AbstractPruner):
         all_embed = []
         for name, p in model.named_parameters():
             print(type(p))
-            if len(p.data.size()) != 1 and type(p) is MaskedEmbedded:
+            if len(p.data.size()) != 1 and type(p) == MaskedEmbedded:
                 #print(f'adding weigths of {name}')
                 #print(f'original data is {p.data}')
                 #print(f'list is {(p.cpu().data.abs().numpy().flatten)}')
-                all_weights += list(p.cpu().data.abs().numpy().flatten())
+                all_embed += list(p.cpu().data.abs().numpy().flatten())
         threshold_embedded = np.percentile(np.array(all_weights), pruning_perc_embed) # For example, median = np.percnetile(some_vector, 50.)
-
+        """
         # generate mask
         masks = []
         for name, p in model.named_parameters():
             if len(p.data.size()) != 1:
-                if type(p) is MaskedLinear:
+                if 'linear' in name:
                     pruned_inds = p.data.abs() > threshold
                     masks.append(pruned_inds.float())
-                elif type(p) is MaskedEmbedded:
+                elif 'token' in name:
                     pruned_inds = p.data.abs() > threshold_embedded
                     masks.append(pruned_inds.float())
-                else:
-                    print(name)
-                    print(type(p))
+                    
         return masks

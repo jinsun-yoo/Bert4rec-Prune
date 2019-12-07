@@ -25,6 +25,8 @@ class BERTTrainer(AbstractTrainer):
 
         logits = logits.view(-1, logits.size(-1))  # (B*T) x V
         labels = labels.view(-1)  # B*T
+        
+        #self.ce = nn.CrossEntropyLoss(ignore_index=0)
         loss = self.ce(logits, labels)
         return loss
 
