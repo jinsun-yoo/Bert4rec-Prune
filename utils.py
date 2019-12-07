@@ -7,7 +7,7 @@ import random
 from datetime import date
 from pathlib import Path
 
-import matplotlib as plt
+import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.backends.cudnn as cudnn

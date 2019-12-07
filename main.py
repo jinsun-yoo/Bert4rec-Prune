@@ -30,6 +30,7 @@ def train():
     print(model.bert.transformer_blocks[0].attention.linear_layers[0].weight)
     scatterplot(model.bert.transformer_blocks[0].attention.linear_layers[0].weight, 256, 256)
     scatterplot(model.bert.embedding.token.weight, 3708, 256)
+    print(model.bert.embedding.token.mask)
     i = 0
     """
     for name, p in model.bert.named_parameters():

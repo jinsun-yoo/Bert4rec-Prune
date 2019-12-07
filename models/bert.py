@@ -24,7 +24,7 @@ class BERTModel(BaseModel):
             print(mask)
             print(mask.data.size())
         """
-        self.bert.embedding.token.weight.set_masks((masks[0]), 'embedding_token')
+        self.bert.embedding.token.set_masks((masks[0]), 'embedding_token')
         #print('[1]')
         self.bert.transformer_blocks[0].attention.linear_layers[0].set_masks((masks[2]), 'tr0_lin0')
         #print('[2]')

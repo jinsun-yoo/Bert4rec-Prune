@@ -57,11 +57,13 @@ class MaskedLinear(nn.Linear):
         else:
             return F.linear(x, self.weight, self.bias)
 
-class MaskedEmbedded(nn.Embedding):
+class MaskedEmbedding(nn.Embedding):
     "Construct a layernorm module (See citation for details)."
 
-    def __init__(self, len, model):
-        super(MaskedEmbedded, self).__init__(len, model)
+    def __init__(self, length, model, padding_idx=None):
+        super(MaskedEmbedding, self).__init__(length, model, padding_idx)
+        self.mask_flag = False
+        self.mask = ''
 
     def set_masks(self, mask, layername=''):
         #print(f'setting mask for {self}+{layername}')
