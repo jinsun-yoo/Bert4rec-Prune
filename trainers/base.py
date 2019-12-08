@@ -40,9 +40,11 @@ class AbstractTrainer(metaclass=ABCMeta):
         self.log_period_as_iter = args.log_period_as_iter
 
         self.pruner = pruner
+        self.prune_code = args.prune_code
         self.pruning_perc = args.pruning_perc
         self.pruning_perc_embed = args.pruning_perc_embed
         self.num_prune_epochs = args.num_prune_epochs
+        self.prune_code = args.prune_code
 
 
     @abstractmethod
@@ -122,7 +124,7 @@ class AbstractTrainer(metaclass=ABCMeta):
             self.optimizer.zero_grad()
 
             if do_prune:
-                masks = self.pruner.weight_prune(self.model, self.pruning_perc, self.pruning_perc_embed)
+                masks = self.pruner.weight_prune(self.model, self.pruning_perc, self.pruning_perc_embed, self.pruning_perc_feed)
                 self.model.set_masks(masks)
 
             loss = self.calculate_loss(batch)
@@ -202,6 +204,7 @@ class AbstractTrainer(metaclass=ABCMeta):
             'pruning_code': self.prune_code,
             'pruning_perc': self.pruning_perc,
             'pruning_perc_embed': self.pruning_perc_embed,
+            'pruning_perc_feed': self.pruning_perc_feed,
             'pruning_epochs': self.num_prune_epochs,
             'num_epochs': self.num_epochs,
             'result': description,

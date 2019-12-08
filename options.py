@@ -98,6 +98,7 @@ parser.add_argument('--prune_code', type=str, default='smallweight')
 parser.add_argument('--prune', type=bool, default=False)
 parser.add_argument('--pruning_perc', type=int, default=0)
 parser.add_argument('--pruning_perc_embed', type=int, default=0)
+parser.add_argument('--pruning_perc_feed', type=int, default=0)
 parser.add_argument('--num_prune_epochs', type=int, default=40)
 
 ################
