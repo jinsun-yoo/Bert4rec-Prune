@@ -43,6 +43,7 @@ class AbstractTrainer(metaclass=ABCMeta):
         self.prune_code = args.prune_code
         self.pruning_perc = args.pruning_perc
         self.pruning_perc_embed = args.pruning_perc_embed
+        self.pruning_perc_feed = args.pruning_perc_feed
         self.num_prune_epochs = args.num_prune_epochs
         self.prune_code = args.prune_code
 
@@ -91,25 +92,6 @@ class AbstractTrainer(metaclass=ABCMeta):
         self.writer.close()
 
        
-    def train_one_epoch_report(self, epoch, accum_iter, do_prune=False):
-        self.model.train()
-        self.lr_scheduler.step()
-
-        average_meter_set = AverageMeterSet()
-
-        for batch_idx, batch in enumerate(tqdm_dataloader):
-            batch_size = batch[0].size(0)
-            batch = [x.to(self.device) for x in batch]
-
-            self.optimizer.zero_grad()
-            loss = self.calculate_loss(batch)
-            loss.backward()
-            self.optimizer.step()
-
-            average_meter_set.update('loss', loss.item())
-            accum_iter += batch_size
-        return accum_iter 
-
     def train_one_epoch(self, epoch, accum_iter, do_prune=False):
         self.model.train()
         self.lr_scheduler.step()

@@ -5,7 +5,7 @@ from .smallweight_allsplit import SmallWeightSplitAll
 
 PRUNERS = {
     SmallWeightPruner.code(): SmallWeightPruner,
-    SmallWeightSplitEmbeddedPruner.code(): SmallWeightSplitEmbeddedPruner
+    SmallWeightSplitEmbeddedPruner.code(): SmallWeightSplitEmbeddedPruner,
     SmallWeightSplitAll.code(): SmallWeightSplitAll
 }
 

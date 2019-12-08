@@ -59,7 +59,8 @@ def save_test_result(export_root, result, title = '', comments = ''):
         filepath = Path(export_root).joinpath('test_result.txt')
     with filepath.open('w') as f:
         json.dump(result, f, indent=2)
-        json.dump(comments, f, indent=2)
+        if comments is not '':
+            json.dump(comments, f, indent=2)
 
 
 def export_experiments_config_as_json(args, experiment_path):

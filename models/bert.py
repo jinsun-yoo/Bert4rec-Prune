@@ -31,12 +31,12 @@ class BERTModel(BaseModel):
         self.bert.transformer_blocks[0].attention.output_linear.set_masks((masks[4]), 'tr0_lin3')
         self.bert.transformer_blocks[0].feed_forward.w_1.set_masks((masks[5]), 'tr0_ff0')
         self.bert.transformer_blocks[0].feed_forward.w_2.set_masks((masks[6]), 'tr0_ff1')
-        self.bert.transformer_blocks[1].attention.linear_layers[0].set_masks((masks[7]]), 'tr1_lin0')
+        self.bert.transformer_blocks[1].attention.linear_layers[0].set_masks((masks[7]), 'tr1_lin0')
         self.bert.transformer_blocks[1].attention.linear_layers[1].set_masks((masks[8]), 'tr1_lin1')
         self.bert.transformer_blocks[1].attention.linear_layers[2].set_masks((masks[9]), 'tr1_lin2')
         self.bert.transformer_blocks[1].attention.output_linear.set_masks((masks[10]), 'tr1_lin3')
-        self.bert.transformer_blocks[0].feed_forward.w_1.set_masks((masks[11]), 'tr1_ff0')
-        self.bert.transformer_blocks[0].feed_forward.w_2.set_masks((masks[12]), 'tr1_ff1')
+        self.bert.transformer_blocks[1].feed_forward.w_1.set_masks((masks[11]), 'tr1_ff0')
+        self.bert.transformer_blocks[1].feed_forward.w_2.set_masks((masks[12]), 'tr1_ff1')
 
         """
         self.bert.embedding.token.set_masks((masks[0]), 'embedding_token')
