@@ -198,6 +198,14 @@ class AbstractTrainer(metaclass=ABCMeta):
                 description = description.replace('NDCG', 'N').replace('Recall', 'R')
                 description = description.format(*(average_meter_set[k].avg for k in description_metrics))
                 tqdm_dataloader.set_description(description)
+        return {
+            'pruning_code': self.prune_code,
+            'pruning_perc': self.pruning_perc,
+            'pruning_perc_embed': self.pruning_perc_embed,
+            'pruning_epochs': self.num_prune_epochs,
+            'num_epochs': self.num_epochs,
+            'result': description,
+        }
 
 
     def _create_optimizer(self):

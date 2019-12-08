@@ -52,10 +52,14 @@ def load_weights(model, path):
     pass
 
 
-def save_test_result(export_root, result):
-    filepath = Path(export_root).joinpath('test_result.txt')
+def save_test_result(export_root, result, title = '', comments = ''):
+    if title is not '':
+        filepath = Path(export_root).joinpath(title)
+    else:
+        filepath = Path(export_root).joinpath('test_result.txt')
     with filepath.open('w') as f:
         json.dump(result, f, indent=2)
+        json.dump(comments, f, indent=2)
 
 
 def export_experiments_config_as_json(args, experiment_path):
