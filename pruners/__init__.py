@@ -1,10 +1,12 @@
 from .smallweightprune import SmallWeightPruner
 from .smallweight_embedsplit import SmallWeightSplitEmbeddedPruner
+from .smallweight_allsplit import SmallWeightSplitAll
 
 
 PRUNERS = {
     SmallWeightPruner.code(): SmallWeightPruner,
     SmallWeightSplitEmbeddedPruner.code(): SmallWeightSplitEmbeddedPruner
+    SmallWeightSplitAll.code(): SmallWeightSplitAll
 }
 
 

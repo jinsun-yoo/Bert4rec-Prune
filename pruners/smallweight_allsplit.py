@@ -5,13 +5,13 @@ import torch.nn as nn
 import numpy as np
 
 
-class SmallWeightSplitEmbeddedPruner(AbstractPruner):
+class SmallWeightSplitAll(AbstractPruner):
     def __init__(self, args, model):
         super().__init__(args, model)
 
     @classmethod
     def code(cls):
-        return 'smallweightsplitembeddedpruner'
+        return 'smallweightsplitall'
 
     def weight_prune(self, model, pruning_perc, pruning_perc_embed = 0, pruning_perc_feed = 0):
         '''
@@ -57,6 +57,9 @@ class SmallWeightSplitEmbeddedPruner(AbstractPruner):
                     pruned_inds = p.data.abs() > threshold
                     masks.append(pruned_inds.float())
                 elif 'token' in name:
+                    pruned_inds = p.data.abs() > threshold_embedded
+                    masks.append(pruned_inds.float())
+                elif 'feed' in name:
                     pruned_inds = p.data.abs() > threshold_embedded
                     masks.append(pruned_inds.float())
                     
