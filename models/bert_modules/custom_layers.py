@@ -31,12 +31,13 @@ class MaskedLinear(nn.Linear):
         super(MaskedLinear, self).__init__(in_features, out_features, bias)
         self.mask_flag = False
         self.mask = ''
+        self.biasmask = torch.zeros(256)
     
     def set_masks(self, mask, layername=''):
         
         self.mask = to_var(mask, requires_grad=False)
         self.weight.data = self.weight.data*self.mask.data
-        self.bias.data = self.bias.data*self.mask.data
+        self.bias.data = self.bias.data*self.biasmask.data
         self.mask_flag = True
     
     def get_masks(self):
@@ -46,7 +47,7 @@ class MaskedLinear(nn.Linear):
         if self.mask_flag == True:
             # applying pruning mask
             weight = self.weight*self.mask
-            bias = self.bias*self.mask
+            bias = self.bias*self.biasmask
             return F.linear(x, weight, bias)
         else:
             return F.linear(x, self.weight, self.bias)
