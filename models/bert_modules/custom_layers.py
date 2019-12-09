@@ -3,7 +3,7 @@ import torch
 import torch.nn.functional as F
 import torch.backends.cudnn as cudnn
 from torch.autograd import Variable
-
+from torch.nn.Parameter import Parameter
 
 
 class LayerNorm(nn.Module):
@@ -32,12 +32,17 @@ class MaskedLinear(nn.Linear):
         self.mask_flag = False
         self.mask = ''
         self.biasmask = torch.zeros(256)
+        self.biassize = in_features
     
     def set_masks(self, mask, layername=''):
         
         self.mask = to_var(mask, requires_grad=False)
         self.weight.data = self.weight.data*self.mask.data
-        self.bias.fill(0)
+        if 'ff0' is in layername:
+            self.biassize = 1024
+            self.bias = Parameter(torch.zeros(1024).to('cuda'))
+        else:
+            self.bias = Parameter(torch.zeros(256).to('cuda'))
         self.mask_flag = True
     
     def get_masks(self):
@@ -47,7 +52,7 @@ class MaskedLinear(nn.Linear):
         if self.mask_flag == True:
             # applying pruning mask
             weight = self.weight*self.mask
-            self.bias.fill(0)
+            self.bias = Parameter(torch.zeros(self.biassize).to('cuda'))
             return F.linear(x, weight, self.bias)
         else:
             return F.linear(x, self.weight, self.bias)
