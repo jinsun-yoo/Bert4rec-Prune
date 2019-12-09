@@ -32,23 +32,7 @@ class SmallWeightSplitAll(AbstractPruner):
         threshold = np.percentile(np.array(all_weights), pruning_perc) # For example, median = np.percnetile(some_vector, 50.)
         threshold_embedded = np.percentile(np.array(all_embed), pruning_perc_embed) # For example, median = np.percnetile(some_vector, 50.)
         threshold_feed = np.percentile(np.array(all_feed), pruning_perc_feed) # For example, median = np.percnetile(some_vector, 50.)
-        """
-                #print(f'adding weigths of {name}')
-                #print(f'original data is {p.data}')
-                #print(f'list is {(p.cpu().data.abs().numpy().flatten)}')
-                all_weights += list(p.cpu().data.abs().numpy().flatten())
-        threshold = np.percentile(np.array(all_weights), pruning_perc) # For example, median = np.percnetile(some_vector, 50.)
-
-        all_embed = []
-        for name, p in model.named_parameters():
-            print(type(p))
-            if len(p.data.size()) != 1 and type(p) == MaskedEmbedded:
-                #print(f'adding weigths of {name}')
-                #print(f'original data is {p.data}')
-                #print(f'list is {(p.cpu().data.abs().numpy().flatten)}')
-                all_embed += list(p.cpu().data.abs().numpy().flatten())
-        threshold_embedded = np.percentile(np.array(all_weights), pruning_perc_embed) # For example, median = np.percnetile(some_vector, 50.)
-        """
+        
         # generate mask
         masks = []
         for name, p in model.named_parameters():
@@ -60,7 +44,7 @@ class SmallWeightSplitAll(AbstractPruner):
                     pruned_inds = p.data.abs() > threshold_embedded
                     masks.append(pruned_inds.float())
                 elif 'feed' in name:
-                    pruned_inds = p.data.abs() > threshold_embedded
+                    pruned_inds = p.data.abs() > threshold_feed
                     masks.append(pruned_inds.float())
                     
         return masks

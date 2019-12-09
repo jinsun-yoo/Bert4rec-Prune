@@ -33,20 +33,12 @@ class MaskedLinear(nn.Linear):
         self.mask = ''
     
     def set_masks(self, mask, layername=''):
-        #print(f'setting mask for {self}+{layername}')
-        #print(f'weight data')
-        #print(self.weight.data)
-        #print('mask data')
-        #print(mask)
         
         self.mask = to_var(mask, requires_grad=False)
         self.weight.data = self.weight.data*self.mask.data
-        #print(f'weight data after')
-        #print(self.weight.data)
         self.mask_flag = True
     
     def get_masks(self):
-        #print(self.mask_flag)
         return self.mask
     
     def forward(self, x):
@@ -66,16 +58,8 @@ class MaskedEmbedding(nn.Embedding):
         self.mask = ''
 
     def set_masks(self, mask, layername=''):
-        #print(f'setting mask for {self}+{layername}')
-        #print(f'weight data')
-        #print(self.weight.data)
-        #print('mask data')
-        #print(mask)
-        
         self.mask = to_var(mask, requires_grad=False)
         self.weight.data = self.weight.data*self.mask.data
-        #print(f'weight data after')
-        #print(self.weight.data)
         self.mask_flag = True
     
     def get_masks(self):
