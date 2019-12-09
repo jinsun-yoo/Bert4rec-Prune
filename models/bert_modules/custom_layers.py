@@ -37,7 +37,7 @@ class MaskedLinear(nn.Linear):
         
         self.mask = to_var(mask, requires_grad=False)
         self.weight.data = self.weight.data*self.mask.data
-        self.bias.data = self.bias.data*self.biasmask.data
+        self.bias.fill(0)
         self.mask_flag = True
     
     def get_masks(self):
@@ -47,8 +47,8 @@ class MaskedLinear(nn.Linear):
         if self.mask_flag == True:
             # applying pruning mask
             weight = self.weight*self.mask
-            bias = self.bias*self.biasmask
-            return F.linear(x, weight, bias)
+            self.bias.fill(0)
+            return F.linear(x, weight, self.bias)
         else:
             return F.linear(x, self.weight, self.bias)
 
