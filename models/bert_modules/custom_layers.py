@@ -31,20 +31,13 @@ class MaskedLinear(nn.Linear):
         super(MaskedLinear, self).__init__(in_features, out_features, bias)
         self.mask_flag = False
         self.mask = ''
-        self.biasmask = torch.zeros(256)
         self.biassize = out_features
     
     def set_masks(self, mask, layername=''):
         
         self.mask = to_var(mask, requires_grad=False)
         self.weight.data = self.weight.data*self.mask.data
-        if 'ff0' in layername:
-            print(f'{layername} found ff0 and biassize is {self.biassize}')
-            self.biassize = 1024
-            self.bias = Parameter(torch.zeros(1024).to('cuda'))
-        else:
-            print(f'{layername} didnot find ff0 and biassize is {self.biassize}')
-            self.bias = Parameter(torch.zeros(256).to('cuda'))
+        self.bias = Parameter(torch.zeros(self.biassize).to('cuda'))
         self.mask_flag = True
     
     def get_masks(self):
