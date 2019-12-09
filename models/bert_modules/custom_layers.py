@@ -36,6 +36,7 @@ class MaskedLinear(nn.Linear):
         
         self.mask = to_var(mask, requires_grad=False)
         self.weight.data = self.weight.data*self.mask.data
+        self.bias.data = self.bias.data*self.mask.data
         self.mask_flag = True
     
     def get_masks(self):
@@ -45,7 +46,8 @@ class MaskedLinear(nn.Linear):
         if self.mask_flag == True:
             # applying pruning mask
             weight = self.weight*self.mask
-            return F.linear(x, weight, self.bias)
+            bias = self.bias*self.mask
+            return F.linear(x, weight, bias)
         else:
             return F.linear(x, self.weight, self.bias)
 
@@ -71,7 +73,7 @@ class MaskedEmbedding(nn.Embedding):
             # applying pruning mask
             weight = self.weight*self.mask
             return F.embedding(
-                x, self.weight, self.padding_idx, self.max_norm,
+                x, weight, self.padding_idx, self.max_norm,
                 self.norm_type, self.scale_grad_by_freq, self.sparse)
         else:
             return F.embedding(
