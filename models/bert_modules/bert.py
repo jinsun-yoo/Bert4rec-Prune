@@ -3,7 +3,6 @@ from torch import nn as nn
 from models.bert_modules.embedding import BERTEmbedding
 from models.bert_modules.transformer import TransformerBlock
 from models.bert_modules.custom_layers import MaskedLinear
-#from .utils.custom_layers import MaskedLinear
 from utils import fix_random_seed_as
 
 

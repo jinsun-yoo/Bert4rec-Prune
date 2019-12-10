@@ -3,7 +3,7 @@ import torch
 import torch.nn.functional as F
 import torch.backends.cudnn as cudnn
 from torch.autograd import Variable
-from torch.nn.parameter import Parameter
+
 
 
 class LayerNorm(nn.Module):
@@ -25,19 +25,16 @@ def to_var(x, requires_grad=False, volatile=False):
         x = x.cuda()
     return Variable(x, requires_grad=requires_grad, volatile=volatile)
 
-# Custom FC layer for pruning
 class MaskedLinear(nn.Linear):
+    "Custom Layer with set/mask and altered forward path"
     def __init__(self, in_features, out_features, bias=True):
         super(MaskedLinear, self).__init__(in_features, out_features, bias)
         self.mask_flag = False
         self.mask = ''
-        self.biassize = out_features
     
     def set_masks(self, mask, layername=''):
-        
         self.mask = to_var(mask, requires_grad=False)
         self.weight.data = self.weight.data*self.mask.data
-        self.bias = Parameter(torch.zeros(self.biassize).to('cuda'))
         self.mask_flag = True
     
     def get_masks(self):
@@ -47,13 +44,12 @@ class MaskedLinear(nn.Linear):
         if self.mask_flag == True:
             # applying pruning mask
             weight = self.weight*self.mask
-            self.bias = Parameter(torch.zeros(self.biassize).to('cuda'))
             return F.linear(x, weight, self.bias)
         else:
             return F.linear(x, self.weight, self.bias)
 
 class MaskedEmbedding(nn.Embedding):
-    "Construct a layernorm module (See citation for details)."
+    "Custom Layer fpr embedding with set/mask and altered forward path"
 
     def __init__(self, length, model, padding_idx=None):
         super(MaskedEmbedding, self).__init__(length, model, padding_idx)
@@ -66,7 +62,6 @@ class MaskedEmbedding(nn.Embedding):
         self.mask_flag = True
     
     def get_masks(self):
-        #print(self.mask_flag)
         return self.mask
     
     def forward(self, x):
@@ -80,4 +75,3 @@ class MaskedEmbedding(nn.Embedding):
             return F.embedding(
                 x, self.weight, self.padding_idx, self.max_norm,
                 self.norm_type, self.scale_grad_by_freq, self.sparse)
-#class MaskedEmbedding(nn.Embedding):

@@ -4,13 +4,13 @@ import torch.nn as nn
 import numpy as np
 
 
-class SmallWeightPruner(AbstractPruner):
+class Pruner_Linear(AbstractPruner):
     def __init__(self, args, model):
         super().__init__(args, model)
 
     @classmethod
     def code(cls):
-        return 'smallweight'
+        return 'pruner_linear'
 
     def weight_prune(self, model, pruning_perc, pruning_perc_embed):
         '''
