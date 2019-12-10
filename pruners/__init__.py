@@ -1,12 +1,11 @@
-from .smallweightprune import SmallWeightPruner
-from .smallweight_embedsplit import SmallWeightSplitEmbeddedPruner
-from .smallweight_allsplit import SmallWeightSplitAll
-
+from .smallweightprune import Pruner_Linear
+from .smallweight_embedsplit import Pruner_Linear_Embed
+from .smallweight_allsplit import PrunerFinal
 
 PRUNERS = {
-    SmallWeightPruner.code(): SmallWeightPruner,
-    SmallWeightSplitEmbeddedPruner.code(): SmallWeightSplitEmbeddedPruner,
-    SmallWeightSplitAll.code(): SmallWeightSplitAll
+    PrunerFinal.code(): PrunerFinal,
+    Pruner_Linear_Embed.code(): Pruner_Linear_Embed,
+    Pruner_Linear.code(): Pruner_Linear
 }
 
 
