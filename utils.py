@@ -7,6 +7,7 @@ import random
 from datetime import date
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.backends.cudnn as cudnn
@@ -51,10 +52,15 @@ def load_weights(model, path):
     pass
 
 
-def save_test_result(export_root, result):
-    filepath = Path(export_root).joinpath('test_result.txt')
+def save_test_result(export_root, result, title = '', comments = ''):
+    if title is not '':
+        filepath = Path(export_root).joinpath(title)
+    else:
+        filepath = Path(export_root).joinpath('test_result.txt')
     with filepath.open('w') as f:
         json.dump(result, f, indent=2)
+        if comments is not '':
+            json.dump(comments, f, indent=2)
 
 
 def export_experiments_config_as_json(args, experiment_path):
@@ -94,6 +100,11 @@ def create_optimizer(model, args):
 
     return optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weight_decay, momentum=args.momentum)
 
+def scatterplot(layer, width = 256, height = 256):
+    y = torch.ones(width, height)
+    x = layer.cpu().detach().numpy()
+    plt.scatter(x,y)
+    plt.show()
 
 class AverageMeterSet(object):
     def __init__(self, meters=None):

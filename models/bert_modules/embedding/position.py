@@ -1,6 +1,7 @@
 import torch.nn as nn
 import torch
 import math
+from models.bert_modules.custom_layers import MaskedEmbedding
 
 
 class PositionalEmbedding(nn.Module):
@@ -9,7 +10,7 @@ class PositionalEmbedding(nn.Module):
         super().__init__()
 
         # Compute the positional encodings once in log space.
-        self.pe = nn.Embedding(max_len, d_model)
+        self.pe = MaskedEmbedding(max_len, d_model)
 
     def forward(self, x):
         batch_size = x.size(0)

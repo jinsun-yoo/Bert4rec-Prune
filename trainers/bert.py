@@ -5,8 +5,8 @@ import torch.nn as nn
 
 
 class BERTTrainer(AbstractTrainer):
-    def __init__(self, args, model, train_loader, val_loader, test_loader, export_root):
-        super().__init__(args, model, train_loader, val_loader, test_loader, export_root)
+    def __init__(self, args, model, train_loader, val_loader, test_loader, export_root, pruner):
+        super().__init__(args, model, train_loader, val_loader, test_loader, export_root, pruner)
         self.ce = nn.CrossEntropyLoss(ignore_index=0)
 
     @classmethod
@@ -25,6 +25,8 @@ class BERTTrainer(AbstractTrainer):
 
         logits = logits.view(-1, logits.size(-1))  # (B*T) x V
         labels = labels.view(-1)  # B*T
+        
+        #self.ce = nn.CrossEntropyLoss(ignore_index=0)
         loss = self.ce(logits, labels)
         return loss
 

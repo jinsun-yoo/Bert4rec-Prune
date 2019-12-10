@@ -1,6 +1,8 @@
 import torch.nn as nn
 from .single import Attention
 
+from models.bert_modules.custom_layers import MaskedLinear
+#asdf
 
 class MultiHeadedAttention(nn.Module):
     """
@@ -15,8 +17,8 @@ class MultiHeadedAttention(nn.Module):
         self.d_k = d_model // h
         self.h = h
 
-        self.linear_layers = nn.ModuleList([nn.Linear(d_model, d_model) for _ in range(3)])
-        self.output_linear = nn.Linear(d_model, d_model)
+        self.linear_layers = nn.ModuleList([MaskedLinear(d_model, d_model) for _ in range(3)])
+        self.output_linear = MaskedLinear(d_model, d_model)
         self.attention = Attention()
 
         self.dropout = nn.Dropout(p=dropout)
