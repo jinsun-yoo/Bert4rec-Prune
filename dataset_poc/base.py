@@ -69,20 +69,14 @@ class AbstractDataset(metaclass=ABCMeta):
             dataset_path.parent.mkdir(parents=True)
         self.maybe_download_raw_dataset()
         df = self.load_ratings_df()
-        print(df)
         df = self.make_implicit(df)
-        print(df)
         df = self.filter_triplets(df)
-        print(df)
         df, umap, smap = self.densify_index(df)
         train, val, test = self.split_df(df, len(umap))
-        print('train')
-        print(train)
-        print('val')
-        print(val)
-        print('test')
-        print(test)
         dataset = {
+                   'train': train,
+                   'val': val,
+                   'test': test,
                    'umap': umap,
                    'smap': smap}
         with dataset_path.open('wb') as f:
@@ -119,6 +113,14 @@ class AbstractDataset(metaclass=ABCMeta):
                     shutil.copyfileobj(f_in, f_out)  
             shutil.move(tmpfile, file_path)
             shutil.rmtree(tmproot)
+        elif self.raw_filetype() == 'txt':
+            tmproot = Path(tempfile.mkdtemp())
+            tmpfile = tmproot.joinpath('file')
+            download(self.url(), tmpfile)
+            folder_path.mkdir(parents=True)
+            shutil.move(tmpfile, folder_path.joinpath('steam.txt'))
+            shutil.rmtree(tmproot)
+            print()
         else:
             tmproot = Path(tempfile.mkdtemp())
             tmpfile = tmproot.joinpath('file')
