@@ -11,6 +11,7 @@ import os
 import tempfile
 import shutil
 import pickle
+import gzip
 
 
 class AbstractDataset(metaclass=ABCMeta):
@@ -38,8 +39,9 @@ class AbstractDataset(metaclass=ABCMeta):
         pass
 
     @classmethod
-    def is_zipfile(cls):
-        return True
+    @abstractmethod
+    def raw_filetype(cls):
+        pass
 
     @classmethod
     def zip_file_content_is_folder(cls):
@@ -87,7 +89,7 @@ class AbstractDataset(metaclass=ABCMeta):
             print('Raw data already exists. Skip downloading')
             return
         print("Raw file doesn't exist. Downloading...")
-        if self.is_zipfile():
+        if self.raw_filetype() == 'zip':
             tmproot = Path(tempfile.mkdtemp())
             tmpzip = tmproot.joinpath('file.zip')
             tmpfolder = tmproot.joinpath('folder')
@@ -96,6 +98,27 @@ class AbstractDataset(metaclass=ABCMeta):
             if self.zip_file_content_is_folder():
                 tmpfolder = tmpfolder.joinpath(os.listdir(tmpfolder)[0])
             shutil.move(tmpfolder, folder_path)
+            shutil.rmtree(tmproot)
+            print()
+        elif self.raw_filetype() == 'gz':
+            tmproot = Path(tempfile.mkdtemp())
+            tmpgz = tmproot.joinpath('file.gz')
+            tmpfile = tmproot.joinpath('file')
+            file_path = folder_path.joinpath(self.all_raw_file_names()[0])
+            if not file_path.parent.is_dir():
+                file_path.parent.mkdir(parents=True)
+            download(self.url(), tmpgz)
+            with gzip.open(tmpgz, 'rb') as f_in:
+                with open(tmpfile, 'wb') as f_out:
+                    shutil.copyfileobj(f_in, f_out)  
+            shutil.move(tmpfile, file_path)
+            shutil.rmtree(tmproot)
+        elif self.raw_filetype() == 'txt':
+            tmproot = Path(tempfile.mkdtemp())
+            tmpfile = tmproot.joinpath('file')
+            download(self.url(), tmpfile)
+            folder_path.mkdir(parents=True)
+            shutil.move(tmpfile, folder_path.joinpath('ratings.txt'))
             shutil.rmtree(tmproot)
             print()
         else:

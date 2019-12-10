@@ -46,6 +46,7 @@ class AbstractTrainer(metaclass=ABCMeta):
         self.pruning_perc_feed = args.pruning_perc_feed
         self.num_prune_epochs = args.num_prune_epochs
         self.prune_code = args.prune_code
+        self.dataset_code = args.dataset_code
 
 
     @abstractmethod
@@ -99,15 +100,15 @@ class AbstractTrainer(metaclass=ABCMeta):
         average_meter_set = AverageMeterSet()
         tqdm_dataloader = tqdm(self.train_loader)
 
+        if do_prune:
+            masks = self.pruner.weight_prune(self.model, self.pruning_perc, self.pruning_perc_embed, self.pruning_perc_feed)
+            self.model.set_masks(masks)
+            
         for batch_idx, batch in enumerate(tqdm_dataloader):
             batch_size = batch[0].size(0)
             batch = [x.to(self.device) for x in batch]
 
             self.optimizer.zero_grad()
-
-            if do_prune:
-                masks = self.pruner.weight_prune(self.model, self.pruning_perc, self.pruning_perc_embed, self.pruning_perc_feed)
-                self.model.set_masks(masks)
 
             loss = self.calculate_loss(batch)
             loss.backward()
@@ -183,6 +184,7 @@ class AbstractTrainer(metaclass=ABCMeta):
                 description = description.format(*(average_meter_set[k].avg for k in description_metrics))
                 tqdm_dataloader.set_description(description)
         return {
+            'dataset': self.dataset_code,
             'pruning_code': self.prune_code,
             'pruning_perc': self.pruning_perc,
             'pruning_perc_embed': self.pruning_perc_embed,
