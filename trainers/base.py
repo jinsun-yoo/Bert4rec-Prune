@@ -110,7 +110,6 @@ class AbstractTrainer(metaclass=ABCMeta):
 
             self.optimizer.zero_grad()
 
-
             loss = self.calculate_loss(batch)
             loss.backward()
 
