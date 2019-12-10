@@ -69,13 +69,20 @@ class AbstractDataset(metaclass=ABCMeta):
             dataset_path.parent.mkdir(parents=True)
         self.maybe_download_raw_dataset()
         df = self.load_ratings_df()
+        print(df)
         df = self.make_implicit(df)
+        print(df)
         df = self.filter_triplets(df)
+        print(df)
         df, umap, smap = self.densify_index(df)
         train, val, test = self.split_df(df, len(umap))
-        dataset = {'train': train,
-                   'val': val,
-                   'test': test,
+        print('train')
+        print(train)
+        print('val')
+        print(val)
+        print('test')
+        print(test)
+        dataset = {
                    'umap': umap,
                    'smap': smap}
         with dataset_path.open('wb') as f:

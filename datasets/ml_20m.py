@@ -5,10 +5,10 @@ import pandas as pd
 from datetime import date
 
 
-class ML1MDataset(AbstractDataset):
+class ML20MDataset(AbstractDataset):
     @classmethod
     def code(cls):
-        return 'ml-1m'
+        return 'ml-20m'
 
     @classmethod
     def url(cls):
@@ -20,10 +20,13 @@ class ML1MDataset(AbstractDataset):
 
     @classmethod
     def all_raw_file_names(cls):
-        return ['README',
-                'movies.dat',
-                'ratings.dat',
-                'users.dat']
+        return ['genome-scores.csv',
+                'genome-tags.csv',
+                'links.csv',
+                'movies.csv',
+                'ratings.csv',
+                'README.txt',
+                'tags.csv']
 
     @classmethod
     def raw_filetype(cls):
@@ -31,8 +34,8 @@ class ML1MDataset(AbstractDataset):
 
     def load_ratings_df(self):
         folder_path = self._get_rawdata_folder_path()
-        file_path = folder_path.joinpath('ratings.dat')
-        df = pd.read_csv(file_path, sep='::', header=None)
+        file_path = folder_path.joinpath('ratings.csv')
+        df = pd.read_csv(file_path, sep=',', header=1)
         df.columns = ['uid', 'sid', 'rating', 'timestamp']
         return df
 

@@ -1,7 +1,7 @@
 from base import AbstractDataset
 
 import pandas as pd
-
+import pickle
 from datetime import date
 
 
@@ -37,3 +37,7 @@ class BeautyDataset(AbstractDataset):
 if __name__ == '__main__':
     dataset = BeautyDataset()
     dataset.load_dataset()
+
+    with open('Data/preprocessed/beauty_min_rating0-min_uc5-min_sc0-splitleave_one_out/dataset.pkl', 'rb') as f:
+        data = pickle.load(f)
+        print(data)
