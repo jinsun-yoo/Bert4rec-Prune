@@ -389,4 +389,9 @@ def get_user_item_nums(args):
             return 6034, 3533
         elif args.min_rating == 0 and args.min_uc == 5 and args.min_sc == 0:
             return 22363, 12101
+    if args.dataset_code == 'steam':
+        if args.min_rating == 4 and args.min_uc == 5 and args.min_sc == 0:
+            return 6034, 3533
+        elif args.min_rating == 0 and args.min_uc == 5 and args.min_sc == 0:
+            return 281428, 13044
     raise ValueError()

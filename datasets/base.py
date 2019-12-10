@@ -113,6 +113,14 @@ class AbstractDataset(metaclass=ABCMeta):
                     shutil.copyfileobj(f_in, f_out)  
             shutil.move(tmpfile, file_path)
             shutil.rmtree(tmproot)
+        elif self.raw_filetype() == 'txt':
+            tmproot = Path(tempfile.mkdtemp())
+            tmpfile = tmproot.joinpath('file')
+            download(self.url(), tmpfile)
+            folder_path.mkdir(parents=True)
+            shutil.move(tmpfile, folder_path.joinpath('ratings.txt'))
+            shutil.rmtree(tmproot)
+            print()
         else:
             tmproot = Path(tempfile.mkdtemp())
             tmpfile = tmproot.joinpath('file')

@@ -13,7 +13,7 @@ class SteamDataset(AbstractDataset):
 
     @classmethod
     def url(cls):
-        return 'http://deepx.ucsd.edu/public/jmcauley/steam/australian_user_reviews.json.gz'
+        return 'https://raw.githubusercontent.com/FeiSun/BERT4Rec/master/data/steam.txt'
 
     @classmethod
     def zip_file_content_is_folder(cls):
@@ -21,23 +21,17 @@ class SteamDataset(AbstractDataset):
 
     @classmethod
     def all_raw_file_names(cls):
-        return ['australian_user_reviews.json']
+        return ['ratings.txt',]
 
     @classmethod
     def raw_filetype(cls):
-        return 'gz'
+        return 'txt'
 
     def load_ratings_df(self):
         folder_path = self._get_rawdata_folder_path()
-        file_path = folder_path.joinpath('australian_user_reviews.json')
-        print(file_path)
-        #df = pd.read_json(file_path, lines=True)
-        #df.columns = ['uid', 'uurl', 'reviews']
-
-        with open(file_path) as f:
-            data = json.load(f)
-        print(data)
-        df= pd.DataFrame(data)
-        print(df)
-        #df = df.drop(columns=['uname', 'helpful', 'review', 'summary', 'datetime'])
+        file_path = folder_path.joinpath('ratings.txt')
+        df = pd.read_csv(file_path, sep=' ', header=None)
+        df.columns = ['uid', 'sid']
+        df['rating'] = 1
+        df['timestamp'] = df.index
         return df
