@@ -1,4 +1,4 @@
-from .utils import *
+from utils import *
 from config import RAW_DATASET_ROOT_FOLDER
 
 import pandas as pd
@@ -15,12 +15,11 @@ import gzip
 
 
 class AbstractDataset(metaclass=ABCMeta):
-    def __init__(self, args):
-        self.args = args
-        self.min_rating = args.min_rating
-        self.min_uc = args.min_uc
-        self.min_sc = args.min_sc
-        self.split = args.split
+    def __init__(self):
+        self.min_rating = 0
+        self.min_uc = 5
+        self.min_sc = 0
+        self.split = 'leave_one_out'
 
         assert self.min_uc >= 2, 'Need at least 2 ratings per user for validation and test'
 
@@ -151,7 +150,7 @@ class AbstractDataset(metaclass=ABCMeta):
         return df, umap, smap
 
     def split_df(self, df, user_count):
-        if self.args.split == 'leave_one_out':
+        if self.split == 'leave_one_out':
             print('Splitting')
             user_group = df.groupby('uid')
             user2items = user_group.progress_apply(lambda d: list(d.sort_values(by='timestamp')['sid']))
