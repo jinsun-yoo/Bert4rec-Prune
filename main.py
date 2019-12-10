@@ -18,7 +18,6 @@ def train():
     from torchvision import datasets, transforms
 
 
-    writer = SummaryWriter()
 
     export_root = setup_train(args)
     test_result_root = 'experiments/testresults'
